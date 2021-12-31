@@ -1,0 +1,164 @@
+.App {
+  padding: 5vh 5vw;
+
+  header {
+    font-size: 30px;
+    margin-bottom: 3%;
+  }
+
+  .home {
+    background: lightgrey;
+    display: flex;
+    padding: 2em;
+    justify-content: flex-start;
+    max-height: 80vh;
+
+    form {
+      flex: 1;
+      background: lightcyan;
+      padding: 1em;
+      border: 1px solid;
+
+      .name,
+      .amount,
+      .date,
+      .vendor {
+        display: block;
+        margin-bottom: 3%;
+      }
+
+      .purchaser {
+        margin-bottom: 1em;
+      }
+
+      .categories {
+        font-size: 0.75em;
+        margin-bottom: 2em;
+      }
+    }
+
+    .content {
+      flex: 4;
+      margin: 0 1em;
+      border: 1px solid;
+      position: relative;
+
+      .details-header {
+        &:first-child {
+          background-color: rgb(119, 70, 70);
+          color: lightcyan;
+          cursor: pointer;
+        }
+      }
+
+      .details {
+        &:nth-child(even) {
+          background-color: #dffbff;
+        }
+
+        &:nth-child(odd) {
+          background-color: #f5fafd;
+        }
+      }
+
+      .details,
+      .details-header {
+        height: 5%;
+        display: flex;
+        flex: 1;
+        font-weight: 300;
+        font-size: 0.8em;
+
+        p,
+        div {
+          margin-right: 0;
+          flex: 1;
+          padding: 0 1em;
+        }
+
+        .amount {
+          text-align: right;
+          margin-right: 80px;
+        }
+
+        .cats {
+          font-size: 10px;
+
+          p {
+            background: rgb(192, 192, 250);
+            color: rgb(0, 0, 0);
+            margin: 1em;
+            padding: 0.2em;
+          }
+        }
+      }
+
+      .results {
+        overflow: auto;
+        height: 80%;
+        background: white;
+      }
+
+      .total-and-filters {
+        display:flex;
+        justify-content: space-between;
+        order:1;
+        height: 15%;
+        .total {
+          // position: absolute;
+          bottom: 0;
+          left: 0;
+          display: flex;
+          flex-direction: column;
+          align-items: space-around;
+          justify-content: space-around;
+          
+          background: rgb(139, 168, 170);
+          font-size: 12px;
+          color: white;
+          width:25%;
+
+          div {
+            margin: 1em;
+            display: flex;
+            justify-content: space-around;
+            // width: 25%;
+
+            span:first-child {
+              flex: 1;
+
+            }
+          }
+        }
+
+      }
+    
+
+    .filters {
+      margin: 1em;
+
+      .totals {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        font-size: 12px;
+
+        .attTotals {
+          display: flex;
+
+          span {
+            padding: .5em;
+          }
+
+          span:first-child {
+            flex: 1;
+          }
+        }
+      }
+    }
+  }
+
+}
+
+
+}
