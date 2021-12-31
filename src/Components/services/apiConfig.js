@@ -5,7 +5,7 @@ import Axios from 'axios'
 let apiUrl
 
 const apiUrls = {
-  production: 'https://sei-items-api.herokuapp.com/api',
+  production: process.env.REACT_APP_AIRTABLE_BASE_URL,
   development: process.env.REACT_APP_AIRTABLE_BASE_URL
 }
 
