@@ -52,7 +52,7 @@ const Home = () => {
 
     const getAllItems = async () => {
         let resp = await getItems()
-        if (resp.data.records.length === 100) {
+        if (resp.data.records && resp.data.records.length === 100) {
             setItems(resp.data.records)
             setOffset(resp.data.offset)
             setFilteredItems([])
