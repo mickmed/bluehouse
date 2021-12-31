@@ -3,6 +3,8 @@ import api from './apiConfig'
 
 export const getCategories = async () => {
   console.log(process.env.REACT_APP_AIRTABLE_BASE_URL)
+  console.log(process.env.REACT_APP_BEARER_KEY)
+
   try {
     const resp = await api.get(`/Categories`);
     return resp;
