@@ -6,10 +6,7 @@ import './App.scss';
 
 function App() {
   let username = prompt('username')
-  let pass
   if (username === process.env.REACT_APP_USERNAME) {
-    pass = prompt('password')
-    if (pass === process.env.REACT_APP_USERPW) {
       return (
         <div className="App">
           <Header className="App-header" />
@@ -22,7 +19,6 @@ function App() {
           </main>
         </div>
       );
-    }
   } else {
     return <div>your login failed</div>
   }
