@@ -4,12 +4,12 @@ import { getItemById, createItem, updateItem, deleteItem, getItems, getItemsWith
 
 const Home = () => {
     const [item, setItem] = useState({})
+    const [items, setItems] = useState([])
+    const [currentItem, setCurrentItem] = useState({})
     // const [amount, setAmount] = useState('')
     const [categories, setCategories] = useState([])
     const [checked, setChecked] = useState({})
-    const [items, setItems] = useState([])
     const [editMode, setEditMode] = useState(false)
-    const [currentItem, setCurrentItem] = useState({})
     const [selected, setSelected] = useState()
     const [sortKey, setSortKey] = useState('')
     const [sortDir, setSortDir] = useState(true)
@@ -31,17 +31,14 @@ const Home = () => {
     }, []);
 
     useEffect(() => {
-
         getAllItems()
     }, [])
 
     useEffect(() => {
         const getAllItems = async () => {
-
             if (items.length % 100 === 0) {
                 let resp = await getItemsWithOffset(offset)
                 setItems([...items, ...resp.data.records])
-
                 if (resp.data.records.length === 100) {
                     setOffset(resp.data.offset)
                 }
@@ -62,13 +59,13 @@ const Home = () => {
 
     const handleChange = (e) => {
         let key, value, newItem
-        if (e.target.type === 'checkbox') {
+        if (e.target.name !== 'purchaser') {
             newItem = { ...currentItem }
             if (editMode) {
 
                 if ('categories' in newItem.fields) {
                     if (e.target.checked) {
-                        newItem.fields.categories.push(e.target.id)
+                        newItem.fields.categories.length < 1 && newItem.fields.categories.push(e.target.id)
                     } else {
                         console.log('false')
                         const index = newItem.fields.categories.indexOf(e.target.id)
@@ -81,26 +78,29 @@ const Home = () => {
                 newItem = { ...item }
                 console.log('not edit')
                 if ('categories' in newItem) {
-                    console.log('remove nw')
-                    e.target.checked ? newItem.categories.push(e.target.id) :
-                        newItem.categories.splice(newItem.categories.indexOf(e.target.id), 1)
-
+                    if (e.target.checked) {
+                        newItem.categories.length && newItem.categories.push(e.target.id)
+                        newItem.categories.shift()
+                    } else {
+                        console.log('false')
+                        const index = newItem.categories.indexOf(e.target.id)
+                        newItem.categories.splice(index, 1)
+                    }
+                    // e.target.checked ? newItem.categories.length < 2 && newItem.categories.push(e.target.id) :
+                    //     newItem.categories.splice(newItem.categories.indexOf(e.target.id), 1)
                 } else {
                     console.log('new')
                     newItem.categories = [e.target.id]
                 }
-
                 console.log(newItem)
             }
-
             editMode ?
                 setCurrentItem(newItem) :
                 setItem(newItem)
-
-        } else {
+        } 
+        else {
             key = e.target.name
             value = e.target.value
-
             editMode ?
                 setCurrentItem({ ...currentItem, fields: { ...currentItem.fields, [key]: value } }) :
                 setItem({ ...item, [key]: value })
@@ -152,14 +152,11 @@ const Home = () => {
             if (sortParam === 'date') {
                 paramA = Date.parse(a.fields[sortParam])
                 paramB = Date.parse(b.fields[sortParam])
-
             } else {
-
                 paramA = a.fields[sortParam]
                 paramB = b.fields[sortParam]
             }
             if (sortDir) {
-
                 if (paramA < paramB) {
                     return -1;
                 }
@@ -167,21 +164,17 @@ const Home = () => {
                     return 1;
                 }
             } else if (Object.keys(array[0].fields).includes('vendor')) {
-
                 if (paramA > paramB) {
                     return -1;
                 }
                 if (paramA < paramB) {
                     return 1;
                 }
-
             }
             return 0;
-
         }
         array.sort(compare)
         return array
-
     }
 
     const sortObject = (obj, att) => {
@@ -191,7 +184,6 @@ const Home = () => {
                 return result;
             }, {});
             setAttTotals(sortedObj)
-
         } else {
             let sortable = [];
             for (let amount in obj) {
@@ -200,7 +192,6 @@ const Home = () => {
             sortable.sort(function (a, b) {
                 return a[1] - b[1];
             });
-
             let objSorted = {}
             sortable.forEach(function(item){
                 objSorted[item[0]]=item[1]
@@ -208,16 +199,7 @@ const Home = () => {
             setAttTotals(objSorted)
             setSortDir(!sortDir)
         }
-
-
-
-
-
-
-
     }
-
-
 
     const sortByHeader = (key) => {
         setSortKey(key)
@@ -232,7 +214,6 @@ const Home = () => {
     }
 
     const filterNames = (key) => {
-
         let obj = {}
         let keys = items.map((e) => {
             return key === 'categories' ? e.fields[key][0] : e.fields[key]
@@ -258,22 +239,16 @@ const Home = () => {
                         obj[totalAtt] += f.fields.amount
                     }
                 }
-
-
-
             })
         })
         setAttTotals(obj)
     }
-
-
 
     const { date, vendor, name, amount, purchaser } = editMode ? currentItem.fields || '' : item
     const cats = editMode ? currentItem.fields.categories || [] : item.categories || []
     let total = 0
     let lyssieTotal = 0
     let marcaTotal = 0
-
 
     return (
         <div>
@@ -349,23 +324,19 @@ const Home = () => {
                     <div className='categories'>
                         {alphaSort(categories, 'name').map((e, i) => (
                             <div key={i} className='category'>
-                                {/* {console.log(cats.includes(e.fields.name))}
-                            {console.log('e', e.fields.name)} */}
-                                {/* {console.log('here', cats.map(e=>Object.keys(e).toString() === e.fields.name))} */}
                                 <input
                                     index={i}
                                     className='category'
                                     name={e.fields.name}
                                     id={e.id}
-                                    type='checkbox'
+                                    type='radio'
                                     checked={cats.includes(e.id) || false}
-                                    // onChange={e => setChecked({ ...checked, [e.target.id]: e.target.checked })}
                                     onChange={handleChange}
+                                    value={e.fields.name}
+                                    // onChange={e => set   Checked({ ...checked, [e.target.id]: e.target.checked })}
                                 />
                                 <label key={i} for={e.id}>{e.fields.name}</label>
-
                             </div>
-
                         ))}
                     </div>
                     <input
@@ -395,10 +366,7 @@ const Home = () => {
 
                     </div>
 
-
-
                     <div className='results'>
-
                         {Object.keys(attTotals).length ?
                             Object.keys(attTotals).map(e => {
                                 total += parseInt(attTotals[e].toFixed(2))
@@ -442,26 +410,12 @@ const Home = () => {
                     </div>
 
                     <div className='total-and-filters'>
-
                         <div className='filters'>
-
                             <div className='filters-buttons'>
                                 <button onClick={() => getAllItems()}>List</button>
                                 <button onClick={() => filterNames('vendor')}>Vendors</button>
                                 <button onClick={() => filterNames('categories')}>Categories</button>
-
-
-
-
-
                             </div>
-                            {/* <div className='totals'>
-                                <div className='att-totals-list'>
-                                    {Object.keys(attTotals).sort().map(e => (
-                                        <div className='attTotals'><span>{e}</span><span>{attTotals[e].toFixed(2)}</span></div>
-                                    ))}
-                                </div>
-                            </div> */}
                         </div>
                         <div className='total'>
                             <div><span onClick={() => filterResults('Lyssie')}>Lyssie</span><span>{lyssieTotal.toFixed(2)}</span></div>
@@ -469,14 +423,8 @@ const Home = () => {
                             <div><span onClick={() => getAllItems()}>Total</span><span>{total.toFixed(2)}</span></div>
                         </div>
                     </div>
-
-
-
                 </div>
-
-
             </div>
-
         </div>
     )
 }
