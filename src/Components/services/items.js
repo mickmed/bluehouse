@@ -2,9 +2,7 @@ import api from './apiConfig'
 
 
 export const getCategories = async () => {
-  console.log(process.env.REACT_APP_AIRTABLE_BASE_URL)
-  console.log(process.env.REACT_APP_BEARER_KEY);
-
+  
   try {
     const resp = await api.get(`/Categories`);
     return resp;
@@ -37,7 +35,6 @@ export const getItemsWithOffset = async (offset) => {
 }
 
 export const getItemById = async id => {
-  console.log(id)
   try {
     const resp = await api.get(`/Expense/${id}`);
     // const resp = await api.get(`/items/${id}`)
@@ -48,7 +45,6 @@ export const getItemById = async id => {
 }
 
 export const createItem = async item => {
-  console.log(item)
 
   try {
     const resp = await api.post(`/Expense`,
@@ -86,7 +82,6 @@ export const updateItem = async (item, id) => {
 }
 
 export const deleteItem = async id => {
-  console.log(id)
   try {
     const resp = await api.delete(`/Expense?&records[]=${id} `)
     return resp.data

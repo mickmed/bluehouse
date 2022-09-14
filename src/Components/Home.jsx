@@ -67,7 +67,6 @@ const Home = () => {
                     if (e.target.checked) {
                         newItem.fields.categories.length < 1 && newItem.fields.categories.push(e.target.id)
                     } else {
-                        console.log('false')
                         const index = newItem.fields.categories.indexOf(e.target.id)
                         newItem.fields.categories.splice(index, 1)
                     }
@@ -76,23 +75,19 @@ const Home = () => {
                 }
             } else {
                 newItem = { ...item }
-                console.log('not edit')
                 if ('categories' in newItem) {
                     if (e.target.checked) {
                         newItem.categories.length && newItem.categories.push(e.target.id)
                         newItem.categories.shift()
                     } else {
-                        console.log('false')
                         const index = newItem.categories.indexOf(e.target.id)
                         newItem.categories.splice(index, 1)
                     }
                     // e.target.checked ? newItem.categories.length < 2 && newItem.categories.push(e.target.id) :
                     //     newItem.categories.splice(newItem.categories.indexOf(e.target.id), 1)
                 } else {
-                    console.log('new')
                     newItem.categories = [e.target.id]
                 }
-                console.log(newItem)
             }
             editMode ?
                 setCurrentItem(newItem) :
